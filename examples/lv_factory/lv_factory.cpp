@@ -17,10 +17,10 @@
 #include "zones.h"
 
 #ifndef WIFI_SSID
-#define WIFI_SSID             "Your WiFi SSID"
+#define WIFI_SSID             "La Casita"
 #endif
 #ifndef WIFI_PASSWORD
-#define WIFI_PASSWORD         "Your WiFi PASSWORD"
+#define WIFI_PASSWORD         "JAEA111123@"
 #endif
 
 #define NTP_SERVER1           "pool.ntp.org"
@@ -28,7 +28,7 @@
 #define GMT_OFFSET_SEC        0
 #define DAY_LIGHT_OFFSET_SEC  0
 #define GET_TIMEZONE_API      "https://ipapi.co/timezone/"
-#define DEFAULT_TIMEZONE      "CST-8"         //When the time zone cannot be obtained, the default time zone is used
+#define DEFAULT_TIMEZONE      "GMT-6"         //When the time zone cannot be obtained, the default time zone is used
 
 #define WIFI_MSG_ID             0x1001
 
@@ -520,8 +520,11 @@ static void lv_clock_gui(lv_obj_t *param)
         time_t now;
         time(&now);
         localtime_r(&now, &timeinfo);
+        int hour_12 = timeinfo.tm_hour % 12;  // 0–11
+        float hour_value = hour_12 * 5 + (timeinfo.tm_min / 12.0f);
         lv_meter_set_indicator_end_value(clock_meter, indic_min, timeinfo.tm_min);
-        lv_meter_set_indicator_end_value(clock_meter, indic_hour, timeinfo.tm_hour);
+        lv_meter_set_indicator_end_value(clock_meter, indic_hour, hour_value);
+
     }, 1000, NULL);
 }
 
